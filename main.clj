@@ -128,3 +128,29 @@
 ;; (finder myTree "no" true)
 
 ;; (myTree '["noarray" "abc"])
+
+;; ========================================================
+;; Напишите функцию, выбирающую из списка
+;; только элементы, встречающиеся более n-раз.
+
+(defn selector [arr n]
+    (let [size (count arr), el (first arr)]
+        (loop [i 0] 
+            (if (>= i size)
+                (if (>= i n)
+                    [el]
+                    []
+                )
+                (if (= (nth arr i) el)
+                    (recur (inc i))
+                    (if (>= i n)
+                        (cons el (lazy-seq (selector (drop i arr) n)))
+                        (selector (drop i arr) n)
+                    )
+                )
+            ) 
+        )
+    )
+)
+
+(selector '(1 1 2 22 2 5 3 0 9 -3 -3 -3 2 5 5) 2)
